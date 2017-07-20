@@ -7,26 +7,12 @@ import React from 'react';
 
 import App from './components/App';
 
-/*
-function getDocument() {
-    console.log("started");
-    request.get("/doc")
-           .then((res) => {
-               console.log('got response', res.body);
-               window.doc = res.body.doc;
-               render((
-                   <App doc={res.body.doc} />
-               ), document.getElementById('app'));
-           })
-        .catch((err) => {console.log(err)})
-}
-*/
 
-function getDocument() {
+function initApp() {
     render((
         <App />
     ), document.getElementById('app'));
 }
 
 
-window.onload = getDocument;
+window.onload = initApp;

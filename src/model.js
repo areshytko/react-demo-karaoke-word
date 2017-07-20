@@ -25,11 +25,8 @@ export default class Model {
 
     getNextNode(){
         let node = this.textNodes.iterateNext();
-        if(!node){
-            return null;
-        }
 
-        while (0 == node.textContent.trim().length) {
+        while (node && 0 == node.textContent.trim().length) {
             node = this.textNodes.iterateNext();
         }
         return node;
@@ -49,22 +46,6 @@ export default class Model {
             words = this.node.textContent.trim().split(' ');
         }
 
-/*
-        let before = words.slice(0, this.wordNumber).join(' ');
-        let after = words.slice(this.wordNumber + 1, words.length).join(' ');
-        let currentWord = words[this.wordNumber];
-
-        this.highlightFragment = this.doc.createElement('span');
-        this.highlightFragment.appendChild(this.doc.createTextNode(before));
-        let span = this.doc.createElement('span');
-        span.appendChild(this.doc.createTextNode(currentWord));
-        this.highlightFragment.appendChild(span);
-        this.highlightFragment.appendChild(this.doc.createTextNode(after));
-
-        this.node.parentNode.replaceChild(this.highlightFragment, this.node);
-
-        console.log(currentWord);
-*/
         this.wordNumber += 1;
     }
 
