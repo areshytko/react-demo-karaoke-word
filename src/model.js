@@ -1,0 +1,74 @@
+/**
+ * Created by areshytko on 19.07.17.
+ */
+
+
+export default class Model {
+
+    constructor(htmlString){
+        this.initDocument(htmlString);
+        this.initWordPointer();
+    }
+
+    initDocument(htmlString){
+        let parser = new DOMParser();
+        this.doc = parser.parseFromString(htmlString, "text/html"); // this should be xml instead of html
+        console.log(this.doc);
+    }
+
+    initWordPointer(){
+        this.textNodes = this.doc.evaluate("/html/body//text()", this.doc, null, XPathResult.ANY_TYPE, null );
+        this.wordNumber = 0;
+        this.node = this.getNextNode();
+        console.log(this.node);
+    }
+
+    getNextNode(){
+        let node = this.textNodes.iterateNext();
+        if(!node){
+            return null;
+        }
+
+        while (0 == node.textContent.trim().length) {
+            node = this.textNodes.iterateNext();
+        }
+        return node;
+    }
+
+    incrementWordPointer(){
+        // this should be changed to a smarted logic when multiple whitespaces are possible, special symbols present, etc.
+        if (!this.node){
+            return;
+        }
+
+        let words = this.node.textContent.trim().split(' ');
+
+        while (words.length <= this.wordNumber) {
+            this.wordNumber = 0;
+            this.node = this.getNextNode();
+            words = this.node.textContent.trim().split(' ');
+        }
+
+/*
+        let before = words.slice(0, this.wordNumber).join(' ');
+        let after = words.slice(this.wordNumber + 1, words.length).join(' ');
+        let currentWord = words[this.wordNumber];
+
+        this.highlightFragment = this.doc.createElement('span');
+        this.highlightFragment.appendChild(this.doc.createTextNode(before));
+        let span = this.doc.createElement('span');
+        span.appendChild(this.doc.createTextNode(currentWord));
+        this.highlightFragment.appendChild(span);
+        this.highlightFragment.appendChild(this.doc.createTextNode(after));
+
+        this.node.parentNode.replaceChild(this.highlightFragment, this.node);
+
+        console.log(currentWord);
+*/
+        this.wordNumber += 1;
+    }
+
+    getViewModel(){
+        return this.doc.getElementsByTagName('body')[0];
+    }
+}
